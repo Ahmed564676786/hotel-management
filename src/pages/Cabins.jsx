@@ -1,67 +1,87 @@
 import { useEffect, useState } from 'react';
-import { getCabins } from '../services/apiCabins';
-import { useQuery } from '@tanstack/react-query';
+import { getCabins, deleteCabin} from '../services/apiCabins';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 function Cabins() {
-//   const [cabins, setCabins] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     async function fetchCabins() {
-//       try {
-//         console.log('Fetching cabins...');
-//         const data = await getCabins();
-//         console.log('Cabins fetched:', data); // see it in console
-//         setCabins(data);
-//       } catch (err) {
-//         console.error('Error fetching cabins:', err);
-//         setError('Failed to load cabins');
-//       } finally {
-//         setLoading(false);
-//       }
-//     }
-
-//     fetchCabins();
-//   }, []);
-
-//   if (loading) return <div>Loading cabins...</div>;
-//   if (error) return <div>{error}</div>;
-//   if (cabins.length === 0) return <div>No cabins found</div>;
 
 
-   const object = useQuery({
+
+   const {data:cabins = [],isLoading} = useQuery({
 
         queryKey:['cabin'],
-        queryFn:getCabins
+        queryFn:() => getCabins(),
+
    });
 
 
-   console.log(object);
+  const queryClient =  useQueryClient();
+
+   const {isLoading:isDeleting,mutate} =  useMutation({
+
+        mutationFn:deleteCabin,
+        onSuccess:()=>{
+      
+          toast.success("Successfully Deleted")
+          
+          queryClient.invalidateQueries(
+
+            {
+
+                queryKey:['cabin']
+            }
+          );
+
+        }
+        ,
+       
+   
+       
+        onError: (err) =>  toast.error(err.message) 
+
+
+   });
+
+
 
   return (
-    // <div>
-    //   <h2>Cabins List</h2>
-    //   <ul>
-    //     {cabins.map((cabin) => (
-    //       <li key={cabin.id}>
-    //         {cabin.name} - {cabin.capacity} people
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
 
 
      <div>
 
-        <ul className='flex  gap-5 text-red-200 bg-gray-800 ' >
+        <ul className='text-white bg-gray-700 px-2 ' >
+
+          <li className="flex justify-between gap-5 py-4">
             
-            <li>Cabin Name</li>
-            <li>Max Capacity</li>
-            <li>Min Capacity</li>
-            <li>Price</li>
-            <li>discount</li>
-            <li><button>Delete</button></li>
+            <span>Name</span>
+            <span>Max Capacity</span>
+            <span>Min Capacity</span>
+            <span>Price</span>
+            <span>Discount</span>
+            <span>Action</span>
+            
+            </li>
+       
+            
+          {
+
+              cabins.map((cabin)=>( 
+                <>
+
+           <li className="flex justify-between gap-5 py-4" key={cabin.id}>
+
+            <span>{cabin.name}</span>
+            <span>{cabin.maxCapacity}</span>
+            <span>{cabin.minCapacity}</span>
+            <span>{cabin.price}</span>
+            <span>{cabin.discount}</span>
+            <button onClick= {()=>mutate(Number(cabin.id))} >Delete</button>
+          </li>
+       
+                </>
+              ))
+
+          }
             
         </ul>
      </div>

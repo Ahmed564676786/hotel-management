@@ -16,3 +16,20 @@ export async function getCabins() {
    return cabins
 
 }
+
+
+export async function deleteCabin(id){
+
+    // Delete matching rows
+  const { data ,error } = await supabase
+  .from('cabins')
+  .delete()
+  .eq('id', id);
+
+  if(error){
+      throw new Error("Could not delete");
+  }
+
+  return data;
+
+}

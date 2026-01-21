@@ -33,3 +33,22 @@ export async function deleteCabin(id){
   return data;
 
 }
+
+
+
+export async function insertCabin(newCabin){
+    // Insert a row
+  const { data, error } = await supabase
+  .from('cabins')
+  .insert([newCabin])
+  .select()
+
+
+  if(error){
+      throw new Error("Could not be inserted New Cabin");
+  }
+
+  return data;
+
+
+}

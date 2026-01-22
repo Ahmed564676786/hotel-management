@@ -168,7 +168,7 @@ function Cabins() {
       name="discount"
       {...register("discount",{
           required:"this is required",
-          validate:(value) => ( value < getValues().price || "Discount should less than 5")
+          validate:(value) => ( value <getValues  || "Discount should less than 5")
       })}
       type="number"
       placeholder="Discount"

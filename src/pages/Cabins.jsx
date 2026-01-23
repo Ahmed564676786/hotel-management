@@ -4,7 +4,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import {useForm } from 'react-hook-form';
 
+
+import styled from 'styled-components';
+
+import { Heading } from '../ui/Heading';
 function Cabins() {
+
 
 
 
@@ -77,7 +82,7 @@ function Cabins() {
 
      <div className='flex flex-col  lg:flex-col'>
 
-
+      <Heading type="h2" color="red" >Hello</Heading>
       <div >
 
          <div className=" bg-gray-700   p-6 text-white">
